@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Infrastructure
 {
-    public class Actor: MonoBehaviour
+    public abstract class Actor: MonoBehaviour
     {
     }
 }

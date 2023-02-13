@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f1bf40857fe804bbdf85225d4c82b9, type: 3}
   m_Name: WeaponRifleData
   m_EditorClassIdentifier: 
-  nameWeaponModel: 
+  nameWeaponModel: RifleWeapon
   singleFire: 0
   fireRate: 0.15
   bulletPrefab: {fileID: 7800144911873379263, guid: 1887ce0d3f01f554a8242312082bd33a,
     type: 3}
-  bulletsPerMagazine: 97931
+  bulletsPerMagazine: 90446
   timeToReload: 1.5
   weaponDamage: 15
-  fireAudio: {fileID: 8300000, guid: 3061c7b9b32d894478e4126ccce25ca3, type: 3}
-  reloadAudio: {fileID: 8300000, guid: a58e438b7cfa445498120af0e6169082, type: 3}
-  bulletSpeed: 300
+  fireAudio: {fileID: 8300000, guid: d7e17e043f6344d408bd10708a13edf1, type: 3}
+  reloadAudio: {fileID: 8300000, guid: c9044df902a70f446b726535a5909397, type: 3}
+  bulletSpeed: 30
   canFire: 1
-  nextFireTime: 20.582987
+  nextFireTime: 5.5693483

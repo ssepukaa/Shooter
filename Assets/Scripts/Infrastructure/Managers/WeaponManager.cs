@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Player;
-using Assets.Scripts.Services;
-using Assets.Scripts.Weapon;
+﻿using Assets.Scripts.Units.Players;
+using Assets.Scripts.Weapons;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers
@@ -9,11 +7,11 @@ namespace Assets.Scripts.Infrastructure.Managers
     public class WeaponManager: MonoBehaviour
     {
         
-        [SerializeField] private WeaponC selectedWeaponC;
+        [SerializeField] private Weapon selectedWeaponC;
         private GameManager _gameManager;
-        private WeaponService _weaponService;
-        public WeaponListData _weaponListData;
-        private PlayerC _playerC;
+       // private Weapon _weaponService;
+        //public Weapon _weaponListData;
+        private Player player;
 
         void Awake()
         {

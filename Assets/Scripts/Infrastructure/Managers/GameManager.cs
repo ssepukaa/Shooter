@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assets.Scripts.Player;
+﻿
+using Assets.Scripts.Units.Enemy;
+using Assets.Scripts.Units.Players;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers
@@ -16,22 +13,32 @@ namespace Assets.Scripts.Infrastructure.Managers
         private GameObject _moveManagerObject;
         private MoveManager _moveManager;
         private WeaponManager _weaponManager;
-        private PlayerC _playerC;
+        private Player player;
+        private EnemySpawner[] _enemySpawners;
 
 
         private void Start()
         {
             
-            _playerC = FindObjectOfType<PlayerC>();
+            player = FindObjectOfType<Player>();
             
             _moveManager = FindObjectOfType<MoveManager>();
             
             _weaponManager = FindObjectOfType<WeaponManager>();
-            
+            _enemySpawners = FindObjectsOfType<EnemySpawner>();
 
-            
+
+
             DontDestroyOnLoad(this);
 
+        }
+
+        public void PlayerDeathMessage()
+        {
+            foreach (EnemySpawner enemySpawner in _enemySpawners)
+            {
+                enemySpawner.PlayerDeath();
+            }
         }
     }
 }

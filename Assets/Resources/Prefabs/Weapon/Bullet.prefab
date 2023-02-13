@@ -41,7 +41,7 @@ TrailRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5998192953282503091}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -53,7 +53,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
+  - {fileID: 2100000, guid: 43e8a4b83e4d2e8449bff8cc5470a82e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,7 +74,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.05
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -83,7 +83,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.18605042
+        value: 0.09589386
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -91,17 +91,17 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.5762148
-        value: 0.12192938
-        inSlope: -0.19515945
-        outSlope: -0.19515945
+        time: 0.5063286
+        value: 0.1506885
+        inSlope: 0.052522577
+        outSlope: 0.052522577
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.49009964
+        inWeight: 0.5695294
+        outWeight: 0.5448268
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.05479431
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -113,8 +113,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.9562435, b: 0, a: 1}
-      key1: {r: 1, g: 0.959795, b: 0, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -160,9 +160,9 @@ GameObject:
   - component: {fileID: 4570494749833736212}
   - component: {fileID: 8826386177406822133}
   - component: {fileID: 16307782222864340}
-  - component: {fileID: 8712067534712556900}
   - component: {fileID: 9017895746406787214}
-  - component: {fileID: -7463517455412310925}
+  - component: {fileID: 468629900320764601}
+  - component: {fileID: 3623786609935187751}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -179,7 +179,7 @@ Transform:
   m_GameObject: {fileID: 7800144911873379263}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.379, y: 0.597, z: -0.557}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6026715322322957252}
@@ -214,7 +214,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e5cf9e7358a8c2048b0ff260e9813b4d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -236,19 +236,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8712067534712556900
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7800144911873379263}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &9017895746406787214
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -265,7 +252,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-7463517455412310925
+--- !u!136 &468629900320764601
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800144911873379263}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.65
+  m_Height: 1.62
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3623786609935187751
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,9 +275,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7800144911873379263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5965901d788e6974eac67fcdd0e3342c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6869c1bb996cb904f8804275fde17fe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 345
-  hitForce: 40
+  bulletSpeed: 100
+  hitForce: 50
   destroyAfter: 3.5

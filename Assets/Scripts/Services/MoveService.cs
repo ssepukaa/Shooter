@@ -1,4 +1,4 @@
-using Assets.Scripts.Player;
+using Assets.Scripts.Units.Players;
 using UnityEngine;
 
 namespace Assets.Scripts.Services
@@ -6,19 +6,19 @@ namespace Assets.Scripts.Services
     public class MoveService : MyServices, IUpdateMoveService
     {
         [Header("Movement")]
-        
+
         private CharacterController _characterController;
         private Vector3 moveDirectionLeft = Vector3.zero;
         private Vector3 moveDirectionRight = Vector3.zero;
         private Transform transform;
-        private PlayerC playerC;
+        private Player player;
         private float _deltairectAxisToFire;
-        
+
         public MoveService(Transform transform)
         {
             this.transform = transform;
             _characterController = transform.gameObject.GetComponent<CharacterController>();
-            playerC = _characterController.gameObject.GetComponent<PlayerC>();
+            player = _characterController.gameObject.GetComponent<Player>();
             _deltairectAxisToFire = Constants.deltaDirectJoystickForFire;
         }
 
@@ -29,28 +29,31 @@ namespace Assets.Scripts.Services
             {
 
                 if (Input.GetButton("Jump"))
-                    moveDirectionLeft.y = playerC.playerM.jumpSpeed;
+                {
+                    moveDirectionLeft.y = player.GetJumpSpeed();
+                }
+
             }
 
-            
+
 
 
             moveDirectionLeft = new Vector3(HorizontalLeft(), 0, VerticalLeft());
             moveDirectionLeft -= Physics.gravity * Time.deltaTime;
             moveDirectionLeft.y = 0;
-            _characterController.Move(moveDirectionLeft * Time.deltaTime * playerC.playerM.moveSpeed);
+            _characterController.Move(moveDirectionLeft * Time.deltaTime * player.GetMoveSpeed());
 
-             if ((HorizontalRight() == 0 && VerticalRight() == 0) && (HorizontalLeft() != 0 || VerticalLeft() != 0))
-             {
-                 transform.forward = moveDirectionLeft;
-             }
+            if ((HorizontalRight() == 0 && VerticalRight() == 0) && (HorizontalLeft() != 0 || VerticalLeft() != 0))
+            {
+                transform.forward = moveDirectionLeft;
+            }
 
             if (HorizontalRight() > _deltairectAxisToFire ||
                 HorizontalRight() < -_deltairectAxisToFire ||
                 VerticalRight() > _deltairectAxisToFire ||
                 VerticalRight() < -_deltairectAxisToFire)
-            { 
-                playerC.FireWeapon();
+            {
+                player.FireWeapon();
 
             }
 
@@ -59,16 +62,16 @@ namespace Assets.Scripts.Services
             {
                 Vector3 rotationVector = new Vector3(HorizontalRight(), 0, VerticalRight());
                 transform.forward = rotationVector;
-               
+
             }
-            
+
 
 
         }
 
         public void UpdateMoveSpeed(float newSpeed)
         {
-            playerC.playerM.moveSpeed = newSpeed;
+            player.SetMoveSpeed(newSpeed);
         }
 
         public float VerticalLeft()

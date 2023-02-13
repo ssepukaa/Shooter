@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assets.Scripts.Player;
+﻿
 using Assets.Scripts.Services;
+using Assets.Scripts.Units.Players;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers
 {
     public class MoveManager: MonoBehaviour
     {
-        private PlayerC _playerC;
+        private Player player;
         private GameManager _gameManager;
         private MoveService _moveService;
 
@@ -21,16 +17,16 @@ namespace Assets.Scripts.Infrastructure.Managers
            // DontDestroyOnLoad(this);
         }
 
-        public void Initialize(GameManager gameManager, PlayerC playerC)
+        public void Initialize(GameManager gameManager, Player player)
         {
             _gameManager = gameManager;
-            _playerC = playerC;
+            this.player = player;
             CreateMoveService();
         }
 
         private void CreateMoveService()
         {
-            _moveService = new MoveService(_playerC.transform);
+            _moveService = new MoveService(player.transform);
         }
     }
 }
