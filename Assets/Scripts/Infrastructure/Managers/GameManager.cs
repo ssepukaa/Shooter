@@ -1,12 +1,9 @@
-﻿
-using Assets.Scripts.Units.Enemy;
+﻿using Assets.Scripts.Units.Enemy;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
 
-namespace Assets.Scripts.Infrastructure.Managers
-{
-    public class GameManager : MonoBehaviour
-    {
+namespace Assets.Scripts.Infrastructure.Managers {
+    public class GameManager : MonoBehaviour {
         public GameObject WeaponManagerPrefab;
         public GameObject MoveManagerPrefab;
         private GameObject _weaponManagerObject;
@@ -17,26 +14,25 @@ namespace Assets.Scripts.Infrastructure.Managers
         private EnemySpawner[] _enemySpawners;
 
 
-        private void Start()
-        {
-            
+        private void Start() {
             player = FindObjectOfType<Player>();
-            
+
             _moveManager = FindObjectOfType<MoveManager>();
-            
+
             _weaponManager = FindObjectOfType<WeaponManager>();
             _enemySpawners = FindObjectsOfType<EnemySpawner>();
 
+            if (FindObjectsOfType<GameManager>().Length > 1) {
+                Destroy(gameObject);
+            } else {
+                DontDestroyOnLoad(this);
 
-
-            DontDestroyOnLoad(this);
+            }
 
         }
 
-        public void PlayerDeathMessage()
-        {
-            foreach (EnemySpawner enemySpawner in _enemySpawners)
-            {
+        public void PlayerDeathMessage() {
+            foreach (EnemySpawner enemySpawner in _enemySpawners) {
                 enemySpawner.PlayerDeath();
             }
         }

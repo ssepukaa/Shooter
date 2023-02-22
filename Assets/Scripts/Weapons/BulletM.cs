@@ -1,10 +1,5 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets.Scripts.Weapons
-{
-    public class BulletM: ScriptableObject
-    {
-
-    }
+namespace Assets.Scripts.Weapons {
+    public class BulletM : ScriptableObject { }
 }

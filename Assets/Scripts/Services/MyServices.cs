@@ -1,8 +1,3 @@
-﻿
-
-namespace Assets.Scripts.Services
-{
-    public class MyServices
-    {
-    }
+﻿namespace Assets.Scripts.Services {
+    public class MyServices { }
 }

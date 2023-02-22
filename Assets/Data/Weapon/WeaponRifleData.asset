@@ -25,3 +25,5 @@ MonoBehaviour:
   bulletSpeed: 30
   canFire: 1
   nextFireTime: 5.5693483
+  _muzzleFirePrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}

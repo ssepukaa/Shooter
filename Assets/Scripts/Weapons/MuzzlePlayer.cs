@@ -1,8 +1,3 @@
-﻿
-namespace Assets.Scripts.Weapons
-{
-    public class MuzzlePlayer: Muzzle
-    {
-
-    }
+﻿namespace Assets.Scripts.Weapons {
+    public class MuzzlePlayer : Muzzle { }
 }

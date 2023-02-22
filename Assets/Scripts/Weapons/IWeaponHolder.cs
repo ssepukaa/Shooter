@@ -1,11 +1,5 @@
-﻿
+﻿// Интерфейс для поиска скрпта того, кто держит оружие - пока не пригодилось
 
-// Интерфейс для поиска скрпта того, кто держит оружие - пока не пригодилось
-
-namespace Assets.Scripts.Weapons
-{
-    public interface IWeaponHolder
-    {
-
-    }
+namespace Assets.Scripts.Weapons {
+    public interface IWeaponHolder { }
 }

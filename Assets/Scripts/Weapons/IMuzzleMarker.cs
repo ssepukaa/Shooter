@@ -1,7 +1,3 @@
-﻿
-namespace Assets.Scripts.Weapons
-{
-    public class IMuzzleMarker
-    {
-    }
+﻿namespace Assets.Scripts.Weapons {
+    public class IMuzzleMarker { }
 }

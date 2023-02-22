@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4000012961768668}
   - component: {fileID: 198000014159833656}
   - component: {fileID: 199000012492269190}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BloodStreamEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010675638318}
-  m_LocalRotation: {x: -0, y: 0.94694734, z: 0.32138887, w: 0}
-  m_LocalPosition: {x: -0.060260773, y: 6.43, z: 8.49}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 4000012818420242}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -37.494003, y: 180.00002, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!198 &198000014159833656
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010675638318}
   serializedVersion: 8
-  lengthInSec: 0.3
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 2
   cullingMode: 3
@@ -3667,12 +3667,12 @@ ParticleSystem:
     radiusScale: 0.1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 260
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 1
     collisionMessages: 0
-    collidesWithDynamic: 1
+    collidesWithDynamic: 0
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
@@ -4711,7 +4711,7 @@ GameObject:
   - component: {fileID: 4000012818420242}
   - component: {fileID: 198000010596725160}
   - component: {fileID: 199000012570322746}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PoolEmitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5237,7 +5237,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 10
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -8366,12 +8366,12 @@ ParticleSystem:
     radiusScale: 5
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 260
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 1
     collisionMessages: 0
-    collidesWithDynamic: 1
+    collidesWithDynamic: 0
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
@@ -9410,7 +9410,7 @@ GameObject:
   - component: {fileID: 4000012291204876}
   - component: {fileID: 198000010148556592}
   - component: {fileID: 199000013376511174}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BloodSplash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9424,8 +9424,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013021800664}
-  m_LocalRotation: {x: 0.3973171, y: -0, z: -0, w: 0.91768146}
-  m_LocalPosition: {x: 0, y: -1.256, z: -1.339}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9440,7 +9440,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013021800664}
   serializedVersion: 8
-  lengthInSec: 0.5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -9881,7 +9881,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 10
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -12862,7 +12862,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -13041,12 +13041,12 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 260
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
-    collidesWithDynamic: 1
+    collidesWithDynamic: 0
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
@@ -14085,7 +14085,7 @@ GameObject:
   - component: {fileID: 4000011364351328}
   - component: {fileID: 198000011579028428}
   - component: {fileID: 199000013497606386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BloodPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14100,7 +14100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013033329774}
   m_LocalRotation: {x: -0, y: -0.00000028088027, z: -0, w: -1}
-  m_LocalPosition: {x: 0.045000076, y: -2.1, z: 0.43}
+  m_LocalPosition: {x: 0, y: -0.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14115,7 +14115,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013033329774}
   serializedVersion: 8
-  lengthInSec: 0.5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -14628,7 +14628,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 10
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -17645,7 +17645,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -17824,12 +17824,12 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 260
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
-    collidesWithDynamic: 1
+    collidesWithDynamic: 0
     interiorCollisions: 1
   TriggerModule:
     enabled: 0

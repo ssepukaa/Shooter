@@ -1,67 +1,82 @@
-﻿using Assets.Scripts.Weapons;
+﻿using Assets.Scripts.Units.Enemy.Data;
+using Assets.Scripts.Units.Players;
+using Assets.Scripts.Weapons;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
-namespace Assets.Scripts.Units.Enemy
-{
+namespace Assets.Scripts.Units.Enemy {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class NPCEnemy : Unit, IEntity, IEnemy
-    {
-       public Transform firePoint;
-        //public GameObject npcDeadPrefab;
+    [RequireComponent(typeof(Animator))]
+    public class NPCEnemy : Unit, IEnemy, IEntity {
+        [Header("Links")]
+        // Добавить в инспекторе вручную
+        public EnemyModelData modelData;
 
-        [HideInInspector] public Transform playerTransform;
-        [HideInInspector] public EnemySpawner es;
-        NavMeshAgent agent;
-        float nextAttackTime = 0;
-        [SerializeField] private GameObject explosionPrefab;
-        [Header("BaseStats")]
-        public float health = 100f;
-        public float movementSpeed = 4f;
-        public float rotationSpeed = 1f;
-        public float jumpSpeed = 1.0F;
-        public bool canMove = true;
-
-        [Header("UniqClassStats")]
-        public float attackDistance = 0.5f;
-        public float damageValue = 5;
-        public float attackRate = 0.5f;
         public Transform muzzle;
 
-        public float GetHealthRef()
-        {
-            return health;
+        private Animator _animator;
+        private Transform _playerTransform;
+        private EnemySpawner _enemySpawner;
+        private NavMeshAgent _agent;
+
+        // Сделать ссылки на Data Scriptableobject
+        // [Header("VFX/SFX")]
+        // private GameObject _onHitPrefab;
+        // private AudioClip _deathAudioClip;
+        // private GameObject _npcDeadPrefab;
+
+        [Header("Stats")] [SerializeField] private float _health = 100f;
+        [Header("Movement")] private float _movementSpeed = 2f;
+        private float _rotationSpeed = 1f;
+        private float _jumpSpeed = 1.0F;
+        private bool _canMove = true;
+
+        [Header("Weapon")] [SerializeField] private float _attackDistance = 1f;
+        [SerializeField] private float _damageValue = 5;
+        private float _attackRate = 0.5f;
+        private float _nextAttackTime = 0;
+        private IEntity _entityPlayer;
+
+        [Header("VFX/SFX")] private Vector3 _hitPosition;
+        private Quaternion _hitRotation;
+
+
+        private void Awake() {
+            InitialReference();
         }
 
-        public float GetMovementSpeedRef()
-        {
-            return movementSpeed;
+        private void InitialReference() {
+            _enemySpawner = FindObjectOfType<EnemySpawner>();
+            _playerTransform = _enemySpawner._plTransform;
+            _entityPlayer = _playerTransform.GetComponent<IEntity>();
+            _animator = GetComponent<Animator>();
+            _agent = GetComponent<NavMeshAgent>();
         }
 
-        public float GetRotationSpeedRef()
-        {
-            return rotationSpeed;
+        private void InitDataFromModel() {
+            //Stats
+            _health = modelData.health;
+            //Movement
+            _movementSpeed = modelData.movementSpeed;
+            _rotationSpeed = modelData.rotationSpeed;
+            _jumpSpeed = modelData.jumpSpeed;
+            _canMove = modelData.canMove;
+            //Weapon
+            _attackDistance = modelData.attackDistance;
+            _damageValue = modelData.damageValue;
+            _attackRate = modelData.attackRate;
+            _nextAttackTime = modelData.nextAttackTime;
+            _agent.stoppingDistance = _attackDistance;
+            _agent.speed = _movementSpeed;
         }
 
-        public float GetJumpSpeedRef()
-        {
-            return jumpSpeed;
-        }
-
-        public bool GetCanMovRef()
-        {
-            return canMove;
-        }
 
         // Start is called before the first frame update
-        void Start()
-        {
-            
-            agent = GetComponent<NavMeshAgent>();
-            agent.stoppingDistance = attackDistance;
-            agent.speed = movementSpeed;
-            es = FindObjectOfType<EnemySpawner>();
-            playerTransform = es.player.transform;
+        void Start() {
+            InitDataFromModel();
+
 
             //Set Rigidbody to Kinematic to prevent hit register
             // if (GetComponent<Rigidbody>())
@@ -71,83 +86,72 @@ namespace Assets.Scripts.Units.Enemy
         }
 
         // Update is called once per frame
-        void Update()
-        {
-            if (playerTransform != null)
-            {
-                if (agent.remainingDistance - attackDistance < 0.01f)
-                {
-                    if (Time.time > nextAttackTime)
-                    {
-                        nextAttackTime = Time.time + attackRate;
+        void Update() {
+            if (!_canMove) return;
+            if (_playerTransform != null) {
+                if (_agent.remainingDistance - _attackDistance < 0.01f) {
+                    if (Time.time > _nextAttackTime) {
+                        _nextAttackTime = Time.time + _attackRate;
 
                         //Attack
+
+
                         RaycastHit hit;
-                        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, attackDistance))
-                        {
-                            if (hit.transform == playerTransform)
-                            {
-                                // Debug.DrawLine(firePoint.position, firePoint.position + firePoint.forward * attackDistance, Color.cyan);
+
+                        if (Physics.Raycast(muzzle.position, muzzle.forward, out hit, _attackDistance)) {
+                            if (hit.transform == _playerTransform) {
+                                //Debug.DrawLine(muzzle.position, muzzle.position + muzzle.forward * _attackDistance, Color.cyan);
 
                                 IEntity player = hit.transform.GetComponent<IEntity>();
-                                player.ApplyDamage(damageValue);
+                                player.ApplyDamage(_damageValue);
+                                player.Hit(hit.transform.position, Quaternion.identity);
                             }
                         }
                     }
-
-
                 }
 
                 //Move towardst he player
-                agent.destination = playerTransform.position;
+                _agent.destination = _playerTransform.position;
                 //Always look at player
-                if (agent.destination != null)
-                {
-                    transform.LookAt(new Vector3(playerTransform.transform.position.x, transform.position.y,
-                        playerTransform.position.z));
-
+                if (_agent.destination != null) {
+                    transform.LookAt(new Vector3(_playerTransform.transform.position.x, transform.position.y,
+                        _playerTransform.position.z));
                 }
             }
-            else
-            {
-
-            }
-            
-
+            else { }
         }
 
 
-
-        public void Hit(Vector3 position, Quaternion rotation)
-        {
-            Instantiate(explosionPrefab, position, rotation);
-
+        public void Hit(Vector3 position, Quaternion rotation) {
+            Instantiate(modelData.onHitPrefab, position, rotation);
+            _enemySpawner.soundManager.PlaySound(modelData.GetSoundOfHit(),0.3f,1f);
+            _hitPosition = position;
+            _hitRotation = rotation;
         }
-        public void ApplyDamage(float damageAmount)
-        {
-            health -= damageAmount;
 
-            if (health <= 0)
-            {
+        public void ApplyDamage(float damageAmount) {
+            _health -= damageAmount;
+
+            if (_health <= 0) {
                 //Player is dead
-                canMove = false;
-                health = 0;
+                _canMove = false;
+                _health = 0;
+                _hitPosition.y = 0.45f;
+                Instantiate(modelData.onDeadPrefab, _hitPosition, _hitRotation);
+               // _enemySpawner.soundManager.PlaySound(modelData.GetSoundOfDeath());
+                _agent.ResetPath();
+
                 Death();
             }
         }
 
-        protected void Death()
-        {
+        protected void Death() {
+            _enemySpawner.soundManager.PlaySound(modelData.GetSoundOfDeath(),0.1f,Random.Range(0.8f,1.1f));
             MessageAfterDeath();
-            Destroy(gameObject);
-
+            gameObject.GetComponent<Collider>().enabled = false;
+            Destroy(gameObject, 1f);
         }
-        public virtual void MessageAfterDeath()
-        {
 
-        }
- 
+        public virtual void MessageAfterDeath() { }
     }
 }
-
-

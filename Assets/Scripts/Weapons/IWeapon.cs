@@ -1,8 +1,3 @@
-﻿
-namespace Assets.Scripts.Weapons
-{
-    public interface IWeapon
-    {
-
-    }
+﻿namespace Assets.Scripts.Weapons {
+    public interface IWeapon { }
 }
