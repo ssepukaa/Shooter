@@ -1,7 +1,9 @@
 ﻿using System.Collections;
-using System.Security.Cryptography;
+using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Infrastructure.Managers;
+using Assets.Scripts.UI.Weapon;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
 
@@ -9,25 +11,38 @@ namespace Assets.Scripts.Weapons {
     //[RequireComponent(typeof(AudioSource))]
     public class Weapon : Actor {
         public WeaponM _weaponM;
-        protected WeaponManager _weaponManager;
+       // protected WeaponManager _weaponManager;
         protected Transform _muzzleTransform;
         [SerializeField] private float _scatter = 0.1f;
         private AudioSource _audioSource;
+        private IBulletChangedUI[] _bulletChangedUIArray;
 
         private Player _player;
         //private float _minScatter = 0.1f;
         // private float _maxScatter = 0.2f;
+        [Header("Weapon")]
+        [SerializeField] private float fireRateFinal;
+        [SerializeField] private float timeToReloadFinal;
+        [SerializeField] private float weaponDamageFinal;
+        [SerializeField] private float bulletSpeedFinal;
+        [SerializeField] private bool canFireFinal = true;
+        [SerializeField] private float nextFireTime = 0;
+        [SerializeField] private int bulletsInMagazine;
+        [SerializeField] private int bulletsInInventory = 10000;
+
 
         void Start() {
             _player = GetComponent<Player>();
 
             _muzzleTransform = _player.GetMuzzleTransform();
-            _weaponManager = FindObjectOfType<WeaponManager>();
+         //   _weaponManager = FindObjectOfType<WeaponManager>();
 
             _audioSource = GetComponent<AudioSource>();
             _audioSource.playOnAwake = false;
             //Make sound 3D
             _audioSource.spatialBlend = 1f;
+            _bulletChangedUIArray = FindObjectsOfType<MonoBehaviour>().OfType<IBulletChangedUI>().ToArray();
+
         }
 
         void Update() {
@@ -39,7 +54,7 @@ namespace Assets.Scripts.Weapons {
             // {
             //     Fire();
             // }
-            if (Input.GetKeyDown(KeyCode.R) && _weaponM.canFire) {
+            if (Input.GetKeyDown(KeyCode.R) && canFireFinal) {
                 ReloadWeapon();
             }
             // if (SimpleInput.GetAxis("HorizontalRight") > 0.9f || SimpleInput.GetAxis("HorizontalRight") < -0.9f ||
@@ -49,7 +64,7 @@ namespace Assets.Scripts.Weapons {
             //
             // }
 
-            _weaponM.nextFireTime += Time.deltaTime;
+            nextFireTime += Time.deltaTime;
         }
 
         public void FireWeapon() {
@@ -57,11 +72,11 @@ namespace Assets.Scripts.Weapons {
         }
 
         protected void Fire() {
-            if (_weaponM.canFire) {
-                if (_weaponM.nextFireTime > _weaponM.fireRate) {
-                    _weaponM.nextFireTime = 0;
+            if (canFireFinal) {
+                if (nextFireTime > GetFireRateFinal()) {
+                    nextFireTime = 0;
 
-                    if (_weaponM.bulletsPerMagazine > 0) {
+                    if (bulletsInMagazine > 0) {
                         //Point fire point at the current center of Camera
 
                         Vector3 fireVector = FireDirectVector();
@@ -72,20 +87,19 @@ namespace Assets.Scripts.Weapons {
                         randomAngle.z += Random.Range(-_scatter, _scatter);
 
                         //Fire
+                        bulletsInMagazine--;
+                        OnPlayerBulletsValueChanged();
+
                         GameObject newBullet = Instantiate<GameObject>(
                             _weaponM.bulletPrefab,
                             _muzzleTransform.position,
                             Quaternion.identity);
 
-                        // GameObject newBullet = Instantiate<GameObject>(_weaponM.bulletPrefab, _muzzleTransform.transform.position, 
+                        
                         var angleRandomForward = Quaternion.Euler(0, 0, randomAngle.z);
                         var bulletRigidbody = newBullet.GetComponent<Rigidbody>();
-                        //var scatteredVector = fireVector;
-                        //scatteredVector = Quaternion.Euler(0, 10, 0) * scatteredVector;
-                        //Vector3 rotationVector = new Vector3(30, 30, 0);
-                        // fireVector = ;
+                        
                         bulletRigidbody.velocity = angleRandomForward * fireVector * _weaponM.bulletSpeed;
-                        //bulletRigidbody.velocity = newBullet.transform.forward.normalized * _weaponM.bulletSpeed;
 
 
                         //Set bullet damage according to weapon damage value
@@ -97,7 +111,9 @@ namespace Assets.Scripts.Weapons {
                         // Destroy(muzzleFX, 0.5f);
 
                         _audioSource.pitch = Random.Range(0.9f, 1.1f);
-                        _weaponM.bulletsPerMagazine--;
+                        bulletsInMagazine--;
+                        OnPlayerBulletsValueChanged();
+
                         _audioSource.clip = _weaponM.fireAudio;
                         _audioSource.Play();
                         //_audioSource.PlayOneShot(_weaponM.fireAudio);
@@ -109,6 +125,9 @@ namespace Assets.Scripts.Weapons {
             }
         }
 
+        private float GetFireRateFinal() {
+            return fireRateFinal = _weaponM.fireRate;
+        }
         protected  Vector3 FireDirectVector() {
             return new Vector3(SimpleInput.GetAxis("HorizontalRight"), 0, SimpleInput.GetAxis("VerticalRight"));
         }
@@ -118,16 +137,27 @@ namespace Assets.Scripts.Weapons {
         }
 
         protected IEnumerator Reload() {
-            _weaponM.canFire = false;
+            canFireFinal = false;
 
             _audioSource.clip = _weaponM.reloadAudio;
             _audioSource.Play();
+            if (bulletsInInventory >= _weaponM.bulletsPerMagazine) {
+                bulletsInMagazine = _weaponM.bulletsPerMagazine;
+                bulletsInInventory -= _weaponM.bulletsPerMagazine;
+            }
+            else {
+                bulletsInMagazine = bulletsInInventory;
+                bulletsInInventory = 0;
+            }
+            OnPlayerBulletsValueChanged();
 
-            yield return new WaitForSeconds(_weaponM.timeToReload);
+            yield return new WaitForSeconds(GetTimeToReloadFinal());
 
-            //_weaponM.bulletsPerMagazine = _weaponM.bulletsPerMagazine;
+            canFireFinal = true;
+        }
 
-            _weaponM.canFire = true;
+        private float GetTimeToReloadFinal() {
+            return timeToReloadFinal = _weaponM.timeToReload;
         }
 
         //Called from WeaponManager
@@ -135,6 +165,15 @@ namespace Assets.Scripts.Weapons {
             StopAllCoroutines();
             _weaponM.canFire = true;
             gameObject.SetActive(activate);
+            OnPlayerBulletsValueChanged();
+            ReloadWeapon();
+        }
+
+        private void OnPlayerBulletsValueChanged() { //обновление бара патронов
+            foreach (var item in _bulletChangedUIArray) {
+                item.OnPlayerBulletsValueChanged(bulletsInMagazine, bulletsInInventory, _weaponM.bulletsPerMagazine);
+
+            }
         }
     }
 }

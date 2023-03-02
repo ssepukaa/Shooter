@@ -1,124 +1,105 @@
-﻿using Assets.Scripts.Infrastructure.Managers;
+﻿using System.Collections;
+using Assets.Scripts.Infrastructure.Managers;
+using Assets.Scripts.Units.Enemy.Data;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Units.Enemy {
-    public class EnemySpawner : MonoBehaviour {
+    public class EnemySpawner : SpawnerManager, IPlayerDead {
+        [SerializeField] private EnemySpawnerModelData _enemySpawnerModelData;
+        private Player _player;
+        private SpawnerManager _spawnerManager;
         public SoundManager soundManager;
-        public GameObject enemyPrefab;
-        public Player player;
 
         [HideInInspector] public Transform _plTransform;
 
         //public Texture crosshairTexture;
-        public float spawnInterval = 2; //Spawn new enemy each n seconds
-        public int enemiesPerWave = 5; //How many enemies per wave
-        public Transform[] spawnPoints;
+        private GameObject enemyPrefab;
+        private float spawnInterval; //Spawn new enemy each n seconds
+        private int enemiesPerWave; //How many enemies per wave
+        private Transform[] spawnPoints;
 
-        float nextSpawnTime = 0;
-        int waveNumber = 1;
-        bool waitingForWave = true;
-        float newWaveTimer = 0;
-
-        int enemiesToEliminate;
+        private float _nextSpawnTime;
+        private int waveNumber;
+        private bool _waitingForWave;
+        private bool isSpawnerLoaded = false;
+        private float newWaveTimer;
 
         //How many enemies we already eliminated in the current wave
-        int enemiesEliminated = 0;
-        int totalEnemiesSpawned = 0;
+        private int _enemiesToEliminate;
+        private int enemiesEliminated;
+        private int _countEnemiesSpawned;
 
         [SerializeField] private bool _isPlayerDeath = false;
 
         // Start is called before the first frame update
         void Start() {
-            player = FindObjectOfType<Player>();
-            _plTransform = player.transform;
 
-            //Lock cursor
-            // Cursor.lockState = CursorLockMode.Locked;
-            //Cursor.visible = false;
+
+            soundManager = FindObjectOfType<SoundManager>();
 
             //Wait 10 seconds for new wave to start
-            newWaveTimer = 2;
-            waitingForWave = true;
+
         }
 
+        public void Initialize(Player player,
+            EnemySpawnerModelData enemySpawnerModelData,
+            SpawnerManager spawnerManager) {
+            _player = player;
+            _enemySpawnerModelData = enemySpawnerModelData;
+            _plTransform = _player.transform;   
+            _spawnerManager = spawnerManager;
+            _waitingForWave = false;
+            isSpawnerLoaded = true;
+            if (!_isPlayerDeath) {
+                StartCoroutine(DelaySpawn());
+            }
+        }
+
+        
         // Update is called once per frame
         void Update() {
-            if (!_isPlayerDeath) {
-                if (waitingForWave) {
-                    if (newWaveTimer >= 0) {
-                        newWaveTimer -= Time.deltaTime;
-                    }
-                    else {
-                        //Initialize new wave
-                        enemiesToEliminate = waveNumber * enemiesPerWave;
-                        enemiesEliminated = 0;
-                        totalEnemiesSpawned = 0;
-                        waitingForWave = false;
-                    }
-                }
-                else {
-                    if (Time.time > nextSpawnTime) {
-                        nextSpawnTime = Time.time + spawnInterval;
 
-                        //Spawn enemy 
-                        if (totalEnemiesSpawned < enemiesToEliminate && !_isPlayerDeath) {
-                            Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-
-                            GameObject enemy = Instantiate(enemyPrefab, randomPoint.position, Quaternion.identity);
-                            //NPCEnemy npc = enemy.GetComponent<NPCEnemy>();
-                            //npc.playerTransform = player.transform;
-                            // npc.es = this;
-                            totalEnemiesSpawned++;
-                        }
-                    }
-                }
-            }
-
-
-            if (player.GetHealth() <= 0) {
-                if (Input.GetKeyDown(KeyCode.Space)) {
-                    Scene scene = SceneManager.GetActiveScene();
-                    SceneManager.LoadScene(scene.name);
-                }
-            }
+            
         }
 
-        void OnGUI() {
-            GUI.Box(new Rect(10, Screen.height - 35, 100, 25), ((int)player.GetHealth()).ToString() + " HP");
-            //GUI.Box(new Rect(Screen.width / 2 - 35, Screen.height - 35, 70, 25), player.weaponManager.selectedWeapon.bulletsPerMagazine.ToString());
+        public IEnumerator DelaySpawn() {
+            yield return new WaitForSeconds(_nextSpawnTime);
+            _countEnemiesSpawned = 0;
+            _waitingForWave = false;
 
-            if (player.GetHealth() <= 0) {
-                GUI.Box(new Rect(Screen.width / 2 - 85, Screen.height / 2 - 20, 170, 40),
-                    "Game Over\n(Press 'Space' to Restart)");
-            }
-            else {
-                // GUI.DrawTexture(new Rect(Screen.width / 2 - 3, Screen.height / 2 - 3, 6, 6), crosshairTexture);
-            }
-
-            GUI.Box(new Rect(Screen.width / 2 - 50, 10, 100, 25), (enemiesToEliminate - enemiesEliminated).ToString());
-
-            if (waitingForWave) {
-                GUI.Box(new Rect(Screen.width / 2 - 125, Screen.height / 4 - 12, 250, 25),
-                    "Waiting for Wave " + waveNumber.ToString() + " (" + ((int)newWaveTimer).ToString() +
-                    " seconds left...)");
-            }
+            StartCoroutine(SpawnEnemy());
         }
 
-        public void EnemyEliminated(NPCEnemy enemy) {
-            enemiesEliminated++;
+        public IEnumerator SpawnEnemy() {
+            while (_countEnemiesSpawned < _enemySpawnerModelData.enemiesPerWave && !_isPlayerDeath) {
+                CreateEnemy();
+                yield return new WaitForSeconds(_enemySpawnerModelData.spawnInterval);
 
-            if (enemiesToEliminate - enemiesEliminated <= 0) {
-                //Start next wave
-                newWaveTimer = 10;
-                waitingForWave = true;
-                waveNumber++;
             }
+
+
         }
 
-        public void PlayerDeath() {
+        private void CreateEnemy() {
+            Transform randomPoint = 
+                _enemySpawnerModelData.spawnPoints[Random.Range(0, _enemySpawnerModelData.spawnPoints.Length)];
+
+            GameObject enemy = Instantiate(_enemySpawnerModelData.enemyPrefab,
+                randomPoint.position,
+                Quaternion.identity);
+
+            _countEnemiesSpawned++;
+        }
+
+        public void OnPlayerDead() {
             _isPlayerDeath = true;
         }
+
+        public void OnEnemyDead(float exp) {
+            _player.OnEnemyDead(exp);
+        }
+
     }
 }

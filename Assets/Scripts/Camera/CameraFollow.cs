@@ -1,5 +1,10 @@
 ﻿using Assets.Scripts.Units.Players;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+
+using UnityEditor;
+
+
 
 namespace Assets.Scripts.Camera {
     public class CameraFollow : MonoBehaviour {
@@ -11,6 +16,7 @@ namespace Assets.Scripts.Camera {
         private Transform _gameObject;
 
         private void Start() {
+           
             _gameObject = FindObjectOfType<Player>().gameObject.transform;
         }
 

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Units.Enemy.Data;
+﻿using Assets.Scripts.Infrastructure.Managers;
+using Assets.Scripts.Units.Enemy.Data;
 using Assets.Scripts.Units.Players;
 using Assets.Scripts.Weapons;
 using Unity.Burst.CompilerServices;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 namespace Assets.Scripts.Units.Enemy {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animator))]
-    public class NPCEnemy : Unit, IEnemy, IEntity {
+    public class NPCEnemy : Unit, IEnemy, IEntity, IPlayerDead {
         [Header("Links")]
         // Добавить в инспекторе вручную
         public EnemyModelData modelData;
@@ -20,6 +21,7 @@ namespace Assets.Scripts.Units.Enemy {
         private Transform _playerTransform;
         private EnemySpawner _enemySpawner;
         private NavMeshAgent _agent;
+        private bool _isPlayerDead = false;
 
         // Сделать ссылки на Data Scriptableobject
         // [Header("VFX/SFX")]
@@ -28,6 +30,7 @@ namespace Assets.Scripts.Units.Enemy {
         // private GameObject _npcDeadPrefab;
 
         [Header("Stats")] [SerializeField] private float _health = 100f;
+        [SerializeField] private float _exp = 2f;
         [Header("Movement")] private float _movementSpeed = 2f;
         private float _rotationSpeed = 1f;
         private float _jumpSpeed = 1.0F;
@@ -47,14 +50,6 @@ namespace Assets.Scripts.Units.Enemy {
             InitialReference();
         }
 
-        private void InitialReference() {
-            _enemySpawner = FindObjectOfType<EnemySpawner>();
-            _playerTransform = _enemySpawner._plTransform;
-            _entityPlayer = _playerTransform.GetComponent<IEntity>();
-            _animator = GetComponent<Animator>();
-            _agent = GetComponent<NavMeshAgent>();
-        }
-
         private void InitDataFromModel() {
             //Stats
             _health = modelData.health;
@@ -66,10 +61,22 @@ namespace Assets.Scripts.Units.Enemy {
             //Weapon
             _attackDistance = modelData.attackDistance;
             _damageValue = modelData.damageValue;
+            _exp = modelData.exp;
             _attackRate = modelData.attackRate;
             _nextAttackTime = modelData.nextAttackTime;
             _agent.stoppingDistance = _attackDistance;
             _agent.speed = _movementSpeed;
+        }
+
+        private void InitialReference() {
+            _enemySpawner = FindObjectOfType<EnemySpawner>();
+            _playerTransform = _enemySpawner._plTransform;
+
+            
+            _animator = GetComponent<Animator>();
+            _agent = GetComponent<NavMeshAgent>();
+            if(_playerTransform==null)return;
+            _entityPlayer = _playerTransform.GetComponent<IEntity>();
         }
 
 
@@ -87,8 +94,8 @@ namespace Assets.Scripts.Units.Enemy {
 
         // Update is called once per frame
         void Update() {
-            if (!_canMove) return;
-            if (_playerTransform != null) {
+            if (!_canMove || _isPlayerDead) return;
+            if (_playerTransform != null && !_isPlayerDead) {
                 if (_agent.remainingDistance - _attackDistance < 0.01f) {
                     if (Time.time > _nextAttackTime) {
                         _nextAttackTime = Time.time + _attackRate;
@@ -149,9 +156,14 @@ namespace Assets.Scripts.Units.Enemy {
             _enemySpawner.soundManager.PlaySound(modelData.GetSoundOfDeath(),0.1f,Random.Range(0.8f,1.1f));
             MessageAfterDeath();
             gameObject.GetComponent<Collider>().enabled = false;
+            _enemySpawner.OnEnemyDead(_exp);
             Destroy(gameObject, 1f);
         }
 
         public virtual void MessageAfterDeath() { }
+        public void OnPlayerDead() {
+           _isPlayerDead = true ;
+           
+        }
     }
 }

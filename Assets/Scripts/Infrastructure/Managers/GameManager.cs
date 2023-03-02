@@ -1,40 +1,43 @@
-﻿using Assets.Scripts.Units.Enemy;
+﻿using System.Collections;
+using Assets.Scripts.Units.Enemy;
+using Assets.Scripts.Units.Enemy.Data;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers {
-    public class GameManager : MonoBehaviour {
-        public GameObject WeaponManagerPrefab;
-        public GameObject MoveManagerPrefab;
-        private GameObject _weaponManagerObject;
-        private GameObject _moveManagerObject;
-        private MoveManager _moveManager;
-        private WeaponManager _weaponManager;
+    public class GameManager : MonoBehaviour,IPlayerDead {
+        
+        public EnemySpawnerModelData[] enemySpawnerModelsList;
         private Player player;
-        private EnemySpawner[] _enemySpawners;
+        private SpawnerManager _spawnManager;
+        private bool _isPlayerDead = false;
 
 
         private void Start() {
-            player = FindObjectOfType<Player>();
-
-            _moveManager = FindObjectOfType<MoveManager>();
-
-            _weaponManager = FindObjectOfType<WeaponManager>();
-            _enemySpawners = FindObjectsOfType<EnemySpawner>();
-
             if (FindObjectsOfType<GameManager>().Length > 1) {
                 Destroy(gameObject);
             } else {
                 DontDestroyOnLoad(this);
 
             }
+            player = FindObjectOfType<Player>();
+
+            _spawnManager = GetComponent<SpawnerManager>();
+            _spawnManager.Init(this, player);
+            _spawnManager.Spawn(enemySpawnerModelsList[0]);
+        }
+
+
+        public void OnPlayerDead() {
+            _isPlayerDead = true;
+
+            StartCoroutine(DelayBeforeDead());
 
         }
 
-        public void PlayerDeathMessage() {
-            foreach (EnemySpawner enemySpawner in _enemySpawners) {
-                enemySpawner.PlayerDeath();
-            }
+        IEnumerator DelayBeforeDead() {
+            yield return new WaitForSeconds(2f);
+            Time.timeScale = 0;
         }
     }
 }

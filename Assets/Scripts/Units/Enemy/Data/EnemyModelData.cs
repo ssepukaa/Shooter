@@ -14,6 +14,7 @@ namespace Assets.Scripts.Units.Enemy.Data {
         // public AudioClip deathAudioClip;
 
         [Header("Stats")] public float health = 100f;
+        public float exp = 2f;
         [Header("Movement")] public float movementSpeed = 4f;
         public float rotationSpeed = 1f;
         public float jumpSpeed = 1.0F;
