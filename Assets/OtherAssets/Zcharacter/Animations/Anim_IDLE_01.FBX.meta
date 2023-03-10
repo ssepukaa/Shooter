@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: f57ccd25ebe7b1248b46d6960ffb7138
 ModelImporter:
-  serializedVersion: 20200
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       1: 100000
@@ -308,6 +308,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -337,7 +338,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -366,6 +367,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -377,6 +379,7 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -877,7 +880,8 @@ ModelImporter:
     - name: Bone_ L Finger1
       parentName: Bone_ L Hand
       position: {x: -0.12340172, y: -0.0026559639, z: -0.03763436}
-      rotation: {x: -0.00039813158, y: 0.0000000074513204, z: -0.0000000018596784, w: 0.99999994}
+      rotation: {x: -0.00039813158, y: 0.0000000074513204, z: -0.0000000018596784,
+        w: 0.99999994}
       scale: {x: 1.0000001, y: 1, z: 0.99999994}
     - name: Bone_ L Finger11
       parentName: Bone_ L Finger1
@@ -1027,6 +1031,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

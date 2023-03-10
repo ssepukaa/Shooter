@@ -4,6 +4,8 @@ namespace Assets.Scripts.Weapons {
     [CreateAssetMenu(fileName = "Data", menuName = "Weapon/WeaponModel", order = 2)]
     public class WeaponM : ScriptableObject {
         public string nameWeaponModel;
+        public Sprite spriteForHUD;
+        public Sprite spriteForNewLevelPopup;
         public bool singleFire = false;
         public float fireRate = 0.1f;
 
@@ -20,5 +22,8 @@ namespace Assets.Scripts.Weapons {
         public bool canFire = true;
         public float nextFireTime = 0;
         public GameObject _muzzleFirePrefab;
+        public float scatter = 15f; //разброс пуль
+        public BulletsTypes bulletsTypes;
+        public string describeWeapon;
     }
 }

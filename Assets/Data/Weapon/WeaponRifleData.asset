@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f1bf40857fe804bbdf85225d4c82b9, type: 3}
   m_Name: WeaponRifleData
   m_EditorClassIdentifier: 
-  nameWeaponModel: RifleWeapon
+  nameWeaponModel: RIFLE
+  spriteForHUD: {fileID: 21300000, guid: c9ef79ba59db38f40bd698e29162563d, type: 3}
+  spriteForNewLevelPopup: {fileID: 21300000, guid: 6db379ad902a74940a1519f33bf730ee,
+    type: 3}
   singleFire: 0
   fireRate: 0.15
   bulletPrefab: {fileID: 7800144911873379263, guid: 1887ce0d3f01f554a8242312082bd33a,
@@ -22,8 +25,11 @@ MonoBehaviour:
   weaponDamage: 15
   fireAudio: {fileID: 8300000, guid: d7e17e043f6344d408bd10708a13edf1, type: 3}
   reloadAudio: {fileID: 8300000, guid: c9044df902a70f446b726535a5909397, type: 3}
-  bulletSpeed: 30
+  bulletSpeed: 50
   canFire: 1
   nextFireTime: 16.230234
   _muzzleFirePrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
     type: 3}
+  scatter: 15
+  bulletsTypes: 1
+  describeWeapon: 

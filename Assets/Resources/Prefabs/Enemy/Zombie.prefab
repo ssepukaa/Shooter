@@ -778,7 +778,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.7
+  m_Radius: 0.4
   m_Height: 1.833288
   m_Direction: 1
   m_Center: {x: 0, y: 0.803522, z: 0}
@@ -796,7 +796,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!195 &2348801419759382964
 NavMeshAgent:
@@ -835,6 +835,7 @@ MonoBehaviour:
   modelData: {fileID: 11400000, guid: cc7dd9ef731c5b14fbcaf6f67409fec0, type: 2}
   muzzle: {fileID: 254321099857306901}
   _health: 15
+  _exp: 2
   _attackDistance: 1
   _damageValue: 5
 --- !u!1 &1758736108074971615

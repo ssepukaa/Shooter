@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 33118056205184840}
   - component: {fileID: 23117022540804038}
   - component: {fileID: 135030472764333120}
-  - component: {fileID: -5877119191963053766}
   m_Layer: 7
   m_Name: Bullet
   m_TagString: Pickups
@@ -98,26 +97,3 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.43935344
   m_Center: {x: -0.000000007450581, y: 0.031888634, z: 0}
---- !u!114 &-5877119191963053766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1825870777587358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1315172d7ad53634e952f7d8f3c02048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollectibleType: 0
-  rotate: 1
-  rotationSpeed: 60
-  moveSpeed: 1
-  collectEffect: {fileID: 1702657300312902, guid: 569d9fc921e8782439ad11dada8ffc5e, type: 3}
-  upRangeMove: 1.5
-  downRangeMove: 0.5
-  speed: 0.4
-  minimum: 0.1
-  maximum: 1
-  speedScale: 0.03

@@ -13,6 +13,8 @@ using Object = UnityEngine.Object;
 
 
 namespace Assets.Scripts.Units.Players {
+    [RequireComponent(typeof(Animator))]
+
     public class Player : Unit, IPlayer, IEntity, IEnemyDead {
 
         public event Action<float> OnPlayerHealthValueChangedEvent;
@@ -52,24 +54,12 @@ namespace Assets.Scripts.Units.Players {
         private Vector3 _hitPosition;
 
         private Quaternion _hitRotation;
+        private Animator _animator;
 
         [Header("UI")] private IExpUI[] _expUiList;
 
 
-        // [Header("Weapon")] 
-
-        // [SerializeField] private float fireRatePlayer;
-
-        // [SerializeField] private float timeToReloadPlayer;
-
-        // [SerializeField] private float weaponDamagePlayer;
-
-        // [SerializeField] private float bulletSpeedPlayer;
-
-        // [SerializeField] private bool canFirePlayer;
-
-
-        //[Header("UniqClassStats")]
+        
 
 
         private void Start() {
@@ -83,6 +73,8 @@ namespace Assets.Scripts.Units.Players {
             this.OnPlayerHealthValueChangedEvent?.Invoke(this.HealthPercent());
             _expUiList = FindObjectsOfType<MonoBehaviour>().OfType<IExpUI>().ToArray();
             OnExpChanged(_exp);
+            _animator = GetComponent<Animator>();
+
         }
 
         private void Update() {
@@ -95,6 +87,7 @@ namespace Assets.Scripts.Units.Players {
 
         public void FireWeapon() {
             _selectedWeapon.FireWeapon();
+            
         }
 
 
@@ -149,45 +142,12 @@ namespace Assets.Scripts.Units.Players {
                 item.OnPlayerDead();
 
             }
-
+            AnimatorDead();
             Destroy(gameObject, 2f);
 
         }
 
-        /*
-       private void GetNextWeapon()
-       {
-           int count = _weaponList.Count;
-           int indexCurrentWeapon = _weaponList.IndexOf(_selectedWeapon);
-           if ((indexCurrentWeapon + 1) < (count - 1))
-           {
-               _selectedWeapon = _weaponList[indexCurrentWeapon + 1];
-           }
-
-           if ((indexCurrentWeapon + 1) > (count - 1))
-           {
-               _selectedWeapon = _weaponList[0];
-           }
-       }
-
-
-       private void GetPreviewWeapon()
-       {
-           int count = _weaponList.Count;
-           int indexCurrentWeapon = _weaponList.IndexOf(_selectedWeapon);
-           if ((indexCurrentWeapon - 1) >= 0)
-           {
-               _selectedWeapon = _weaponList[indexCurrentWeapon - 1];
-           }
-
-           if ((indexCurrentWeapon - 1) < 0)
-           {
-               _selectedWeapon = _weaponList[count - 1];
-           }
-
-       }
-       */
-
+       
         public float GetHealth() {
             return health;
         }
@@ -207,7 +167,7 @@ namespace Assets.Scripts.Units.Players {
             if (_exp >= GetLevelExp()) {
                 var expTemp = _exp - GetLevelExp();
                 _exp = expTemp;
-                _level++;
+                OnLevelUp();
             }
             foreach (var item in _expUiList) {
                 item.OnPlayerExpValueChanged(_exp,
@@ -217,9 +177,40 @@ namespace Assets.Scripts.Units.Players {
             }
         }
 
+        private void OnLevelUp() {
+            _level++;
+            _gameManager.OnLevelUpOpenPopup(_selectedWeapon.RandomChooseNewWeapon());
+        }
+
+        public void GetNewWeaponForWeapon(WeaponC weaponC) {
+            _selectedWeapon.GetNewWeapon(weaponC);
+        }
+
         private float GetLevelExp() {
             _levelExp = (float)_level * 10f;
             return _levelExp;
         }
+
+        public void AnimatorWalk() {
+            _animator.SetTrigger("Walk");
+        }
+
+        public void AnimatorAttack() {
+            _animator.SetTrigger("Attack");
+
+        }
+
+        public void AnimatorDead() {
+            _animator.SetTrigger("Dead");
+        }
+
+        public void AnimatorEnableRegister(string nameAnimatorBool) {
+            _animator.SetBool(nameAnimatorBool, true);
+        }
+
+        public void AnimatorDisableRegister(string nameAnimatorBool) {
+            _animator.SetBool(nameAnimatorBool, true);
+        }
+        
     }
 }

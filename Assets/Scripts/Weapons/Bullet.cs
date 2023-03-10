@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.Weapons {
     [RequireComponent(typeof(CapsuleCollider))]
-    public class Bullet : MonoBehaviour {
-        public float bulletSpeed = 345;
-        public float hitForce = 50f;
-        public float destroyAfter = 3.5f;
+    public class Bullet : MonoBehaviour, IBullet {
+        public float bulletSpeed;
+        public float hitForce;
+        public float destroyAfter;
 
         float currentTime = 0;
         Vector3 newPos;

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Infrastructure.Managers;
+﻿using System.Collections;
+using Assets.Scripts.Infrastructure.Managers;
 using Assets.Scripts.Units.Enemy.Data;
 using Assets.Scripts.Units.Players;
 using Assets.Scripts.Weapons;
@@ -102,13 +103,14 @@ namespace Assets.Scripts.Units.Enemy {
 
                         //Attack
 
-
+                        StartCoroutine(DelayBeforeAttack());
                         RaycastHit hit;
+                        
 
                         if (Physics.Raycast(muzzle.position, muzzle.forward, out hit, _attackDistance)) {
                             if (hit.transform == _playerTransform) {
                                 //Debug.DrawLine(muzzle.position, muzzle.position + muzzle.forward * _attackDistance, Color.cyan);
-
+                                _animator.SetTrigger("Attack");
                                 IEntity player = hit.transform.GetComponent<IEntity>();
                                 player.ApplyDamage(_damageValue);
                                 player.Hit(hit.transform.position, Quaternion.identity);
@@ -119,6 +121,7 @@ namespace Assets.Scripts.Units.Enemy {
 
                 //Move towardst he player
                 _agent.destination = _playerTransform.position;
+                _animator.SetTrigger("Walking");
                 //Always look at player
                 if (_agent.destination != null) {
                     transform.LookAt(new Vector3(_playerTransform.transform.position.x, transform.position.y,
@@ -126,6 +129,10 @@ namespace Assets.Scripts.Units.Enemy {
                 }
             }
             else { }
+        }
+
+        private IEnumerator DelayBeforeAttack() {
+            yield return new WaitForSeconds(_attackRate);
         }
 
 
@@ -157,6 +164,7 @@ namespace Assets.Scripts.Units.Enemy {
             MessageAfterDeath();
             gameObject.GetComponent<Collider>().enabled = false;
             _enemySpawner.OnEnemyDead(_exp);
+            _animator.SetTrigger("Death");
             Destroy(gameObject, 1f);
         }
 

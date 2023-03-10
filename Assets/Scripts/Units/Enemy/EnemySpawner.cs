@@ -73,7 +73,7 @@ namespace Assets.Scripts.Units.Enemy {
         }
 
         public IEnumerator SpawnEnemy() {
-            while (_countEnemiesSpawned < _enemySpawnerModelData.enemiesPerWave && !_isPlayerDeath) {
+            while (_countEnemiesSpawned <= _enemySpawnerModelData.enemiesPerWave && !_isPlayerDeath) {
                 CreateEnemy();
                 yield return new WaitForSeconds(_enemySpawnerModelData.spawnInterval);
 

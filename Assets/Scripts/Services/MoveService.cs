@@ -10,6 +10,8 @@ namespace Assets.Scripts.Services {
         private Player player;
         private float _deltairectAxisToFire;
         public bool canMove = true;
+        private bool _checkSwitchRegisterIsWalking;
+        private bool _checkSwitchRegisterIsAttacking;
 
         public MoveService(Transform transform) {
             this.transform = transform;
@@ -31,9 +33,19 @@ namespace Assets.Scripts.Services {
             moveDirectionLeft -= Physics.gravity * Time.deltaTime;
             moveDirectionLeft.y = 0;
             _characterController.Move(moveDirectionLeft * Time.deltaTime * player.GetMoveSpeed());
+            if (moveDirectionLeft != Vector3.zero) {
+                player.AnimatorWalk();
+
+            }
+
+
+
 
             if ((HorizontalRight() == 0 && VerticalRight() == 0) && (HorizontalLeft() != 0 || VerticalLeft() != 0)) {
                 transform.forward = moveDirectionLeft;
+                
+
+
             }
 
             if (HorizontalRight() > _deltairectAxisToFire ||
@@ -41,7 +53,15 @@ namespace Assets.Scripts.Services {
                 VerticalRight() > _deltairectAxisToFire ||
                 VerticalRight() < -_deltairectAxisToFire) {
                 player.FireWeapon();
+                player.AnimatorAttack();
+
+
+
+
             }
+
+
+
 
 
             if (VerticalRight() != 0 || HorizontalRight() != 0) {
