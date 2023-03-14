@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64acd33fb42ce534a88911b63e5ef20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponManagerPrefab: {fileID: 8454208357749608191, guid: 9ae63eaf2e7d31d41b507aa029bc06ce,
-    type: 3}
-  MoveManagerPrefab: {fileID: 7332417681275108108, guid: 3fbf9b13f79e63a40bc5fbe41176faf3,
-    type: 3}
+  typeRandomPickupGroup: {fileID: 11400000, guid: ccc029287bb6fbb4db59b5bf244a2009,
+    type: 2}
+  randomPickupModelData: {fileID: 11400000, guid: 39c2187ef8fb7f443837131f9c9efb74,
+    type: 2}
+  enemySpawnerModelsList: []

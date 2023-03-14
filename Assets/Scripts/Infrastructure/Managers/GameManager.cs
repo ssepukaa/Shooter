@@ -2,18 +2,26 @@
 using Assets.Scripts.UI.Menu;
 using Assets.Scripts.Units.Enemy;
 using Assets.Scripts.Units.Enemy.Data;
+using Assets.Scripts.Units.Pickups;
+using Assets.Scripts.Units.Pickups.Data;
 using Assets.Scripts.Units.Players;
 using Assets.Scripts.Weapons;
 using UnityEngine;
 
+
+
+
 namespace Assets.Scripts.Infrastructure.Managers {
-    public class GameManager : MonoBehaviour,IPlayerDead {
-        
+    public class GameManager : MonoBehaviour, IPlayerDead {
+
+        public TypeRandomPickupGroup typeRandomPickupGroup;
+        private RandomPickupModelData _randomPickupModelData;
         public EnemySpawnerModelData[] enemySpawnerModelsList;
         private Player _player;
         private SpawnerManager _spawnManager;
         private bool _isPlayerDead = false;
         private UIInterfaceButtonsPopups _uiInterfaceButtonsPopups;
+
 
 
         private bool _isOpenedPopupNewLevel = false; //тестово на одно открытие окна
@@ -48,7 +56,7 @@ namespace Assets.Scripts.Infrastructure.Managers {
         }
 
         public void OnLevelUpOpenPopup(WeaponC weaponC) {
-            if(_isOpenedPopupNewLevel) return; //тестово на одно открытие окна
+            if (_isOpenedPopupNewLevel) return; //тестово на одно открытие окна
             Debug.Log("Завершить систему прокачки каждый уровень, чтобы не было ошибок");
             _uiInterfaceButtonsPopups.OpenPopupNewLevel(weaponC, this);
             _isOpenedPopupNewLevel = true;
@@ -60,6 +68,25 @@ namespace Assets.Scripts.Infrastructure.Managers {
 
         public void GetNewWeaponForPlayer(WeaponC weaponC) {
             _player.GetNewWeaponForWeapon(weaponC);
+        }
+
+        public PickupModelData GetRandomModelData() {
+            // добавить систему рандомизации разных групп пикапов!!!!
+            //_______________________________________________________________________________
+            _randomPickupModelData = typeRandomPickupGroup.randomPickupModelsData[0];
+            var model = _randomPickupModelData.GetRandomModelData();
+            return model;
+            //____________________________________________________________________________
+        }
+
+        public void CreatePickupOnEnemyDeath(Transform transform) {
+            var pref = GetRandomModelData();
+            if (pref.typePickup == TypePickup.none) return;
+            
+            Instantiate(pref.prefabBullet, transform.position,
+                                transform.rotation);
+
+
         }
     }
 }

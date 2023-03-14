@@ -28,4 +28,5 @@ MonoBehaviour:
   nextFireTime: 0
   _muzzleFirePrefab: {fileID: 0}
   scatter: 15
-  bulletsTypes: 3
+  pickupTypes: 30
+  describeWeapon: 

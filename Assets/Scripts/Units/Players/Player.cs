@@ -4,6 +4,8 @@ using Assets.Scripts.Infrastructure.Managers;
 using Assets.Scripts.Services;
 using Assets.Scripts.UI.Exp;
 using Assets.Scripts.Units.Enemy;
+using Assets.Scripts.Units.Pickups.Data;
+using Assets.Scripts.Units.Players;
 using Assets.Scripts.Units.Players.Data;
 using Assets.Scripts.Weapons;
 using Unity.VisualScripting;
@@ -12,22 +14,28 @@ using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 
+
 namespace Assets.Scripts.Units.Players {
+
+
     [RequireComponent(typeof(Animator))]
 
     public class Player : Unit, IPlayer, IEntity, IEnemyDead {
+
 
         public event Action<float> OnPlayerHealthValueChangedEvent;
 
 
         public PlayerModelData playerModelData;
+        public RandomPickupModelData randomPickupModelDataAmmo
+            ;
 
 
         //public WeaponListData currWeaponListData;
         private SoundManager _soundManager;
         public Transform _muzzle;
         private MoveService moveService;
-        private Weapon _selectedWeapon;
+        private Weapon _weapon;
 
         private GameManager _gameManager;
 
@@ -59,7 +67,7 @@ namespace Assets.Scripts.Units.Players {
         [Header("UI")] private IExpUI[] _expUiList;
 
 
-        
+
 
 
         private void Start() {
@@ -67,7 +75,7 @@ namespace Assets.Scripts.Units.Players {
             health = maxHealth;
             _soundManager = FindObjectOfType<SoundManager>();
 
-            _selectedWeapon = GetComponent<Weapon>();
+            _weapon = GetComponent<Weapon>();
             moveService = new MoveService(this.transform);
             _gameManager = FindObjectOfType<GameManager>();
             this.OnPlayerHealthValueChangedEvent?.Invoke(this.HealthPercent());
@@ -86,8 +94,8 @@ namespace Assets.Scripts.Units.Players {
         }
 
         public void FireWeapon() {
-            _selectedWeapon.FireWeapon();
-            
+            _weapon.FireWeapon();
+
         }
 
 
@@ -147,7 +155,7 @@ namespace Assets.Scripts.Units.Players {
 
         }
 
-       
+
         public float GetHealth() {
             return health;
         }
@@ -179,11 +187,11 @@ namespace Assets.Scripts.Units.Players {
 
         private void OnLevelUp() {
             _level++;
-            _gameManager.OnLevelUpOpenPopup(_selectedWeapon.RandomChooseNewWeapon());
+            _gameManager.OnLevelUpOpenPopup(_weapon.RandomChooseNewWeapon());
         }
 
         public void GetNewWeaponForWeapon(WeaponC weaponC) {
-            _selectedWeapon.GetNewWeapon(weaponC);
+            _weapon.GetNewWeapon(weaponC);
         }
 
         private float GetLevelExp() {
@@ -211,6 +219,21 @@ namespace Assets.Scripts.Units.Players {
         public void AnimatorDisableRegister(string nameAnimatorBool) {
             _animator.SetBool(nameAnimatorBool, true);
         }
-        
+
+
+
+        public void AddPickup(PickupModelData data) {
+            switch (data.typeGroupOfPickups) {
+                case TypeGroupOfPickups.ammo:
+                    _weapon.AddAmmo(data.typePickup, data.valuePickup);
+                    break;
+                case TypeGroupOfPickups.none:
+                    break;
+            }
+
+
+
+        }
+
     }
 }

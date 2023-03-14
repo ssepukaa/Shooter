@@ -23,6 +23,7 @@ namespace Assets.Scripts.Units.Enemy {
         private EnemySpawner _enemySpawner;
         private NavMeshAgent _agent;
         private bool _isPlayerDead = false;
+        private GameManager _gameManager;
 
         // Сделать ссылки на Data Scriptableobject
         // [Header("VFX/SFX")]
@@ -48,6 +49,7 @@ namespace Assets.Scripts.Units.Enemy {
 
 
         private void Awake() {
+            _gameManager = FindObjectOfType<GameManager>();
             InitialReference();
         }
 
@@ -168,7 +170,9 @@ namespace Assets.Scripts.Units.Enemy {
             Destroy(gameObject, 1f);
         }
 
-        public virtual void MessageAfterDeath() { }
+        public void MessageAfterDeath() {
+            _gameManager.CreatePickupOnEnemyDeath(this.transform);
+        }
         public void OnPlayerDead() {
            _isPlayerDead = true ;
            

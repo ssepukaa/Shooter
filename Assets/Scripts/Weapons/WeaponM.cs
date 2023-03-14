@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Units.Pickups.Data;
+using UnityEngine;
 
 namespace Assets.Scripts.Weapons {
     [CreateAssetMenu(fileName = "Data", menuName = "Weapon/WeaponModel", order = 2)]
@@ -23,7 +24,9 @@ namespace Assets.Scripts.Weapons {
         public float nextFireTime = 0;
         public GameObject _muzzleFirePrefab;
         public float scatter = 15f; //разброс пуль
-        public BulletsTypes bulletsTypes;
+        //public BulletsTypes bulletsTypes;
+        public TypePickup pickupTypes;
+
         public string describeWeapon;
     }
 }

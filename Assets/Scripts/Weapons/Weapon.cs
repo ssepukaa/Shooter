@@ -5,6 +5,7 @@ using System.Linq;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Infrastructure.Managers;
 using Assets.Scripts.UI.WeaponUI;
+using Assets.Scripts.Units.Pickups.Data;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -41,13 +42,15 @@ namespace Assets.Scripts.Weapons {
 
         private WeaponC _currentWeaponC;
         private WeaponM _currentWeaponM;
-        private int _countWeaponC = 1;
+        private int _countWeaponC = 0;
         // private int _indexCurrentWeaponC = 0;
 
         // [SerializeField] List<WeaponM> _weaponMArray;
         //________________________________________________________________________
         private BulletsTypes _bulletsTypes;
+        private TypePickup _typePickup;
         private Dictionary<BulletsTypes, int> _bulletsDictionary = new Dictionary<BulletsTypes, int>(7);
+        private Dictionary<TypePickup, int> _pickupsDictionary = new Dictionary<TypePickup, int>();
         private WeaponC[] _weaponCHandleArray = new WeaponC[5];
         private WeaponC[] _weaponCAllArray = new WeaponC[7];
         private WeaponM[] _weaponMArray = new WeaponM[7];
@@ -94,13 +97,13 @@ namespace Assets.Scripts.Weapons {
             _weaponMArray[4] = _rpgWeaponM;
             _weaponMArray[5] = _flamethrowerWeaponM;
             _weaponMArray[6] = _katanaWeaponM;
-            _bulletsDictionary[BulletsTypes.bulletsRPG] = _bulletsTypeRPG;
-            _bulletsDictionary[BulletsTypes.bulletsRifle] = _bulletsTypeRifle;
-            _bulletsDictionary[BulletsTypes.bulletsShotgun] = _bulletsTypeShotgun;
-            _bulletsDictionary[BulletsTypes.bulletsSniperRifle] = _bulletsTypeSniperRifle;
-            _bulletsDictionary[BulletsTypes.bulletsMinigun] = _bulletsTypeMinigun;
-            _bulletsDictionary[BulletsTypes.bulletsFlamethrower] = _bulletsTypeFlamethrower;
-            _bulletsDictionary[BulletsTypes.noneBullets] = 0;
+            _pickupsDictionary[TypePickup.bulletsRPG] = _bulletsTypeRPG;
+            _pickupsDictionary[TypePickup.bulletsRifle] = _bulletsTypeRifle;
+            _pickupsDictionary[TypePickup.bulletsShotgun] = _bulletsTypeShotgun;
+            _pickupsDictionary[TypePickup.bulletsSniperRifle] = _bulletsTypeSniperRifle;
+            _pickupsDictionary[TypePickup.bulletsMinigun] = _bulletsTypeMinigun;
+            _pickupsDictionary[TypePickup.bulletsFlamethrower] = _bulletsTypeFlamethrower;
+            _pickupsDictionary[TypePickup.none] = 0;
 
             _player = GetComponent<Player>();
 
@@ -117,9 +120,9 @@ namespace Assets.Scripts.Weapons {
             GetReferenceWeaponUI();
             CreateAllWeaponsAndGetFirstWeaponC();
             _weaponBarUI.SetImageWeapon(_weaponObjectsUIArray[0], _weaponCHandleArray[0].weaponM.spriteForHUD);
-           
+
             _weaponBarUI.EnableIdleState(_weaponObjectsUIArray[0]);
-            
+
             _currentWeaponC = _weaponCHandleArray[0];
 
             //_currentWeaponM = _currentWeaponC.weaponM;
@@ -147,7 +150,7 @@ namespace Assets.Scripts.Weapons {
             _weaponCAllArray[5] = _flamethrowerWeaponC;
             _weaponCAllArray[6] = _katanaWeaponC;
 
-            _weaponCHandleArray[_countWeaponC-1] = _weaponCAllArray[0];
+            _weaponCHandleArray[_countWeaponC] = _weaponCAllArray[0];
             //_countWeaponC++;
             _weaponCAllArray[0] = null;
         }
@@ -155,18 +158,20 @@ namespace Assets.Scripts.Weapons {
 
         public void GetNewWeapon(WeaponC weaponC) {
             _countWeaponC++;
-            if (_countWeaponC>=5) return; //всего 5 слотов в HUD для оружия
+            if (_countWeaponC>=4) return; //всего 5 слотов в HUD для оружия
 
             var index = Array.IndexOf(_weaponCAllArray, weaponC);
-            _weaponCHandleArray[_countWeaponC-1] = _weaponCAllArray[index];
+            _weaponCHandleArray[_countWeaponC] = _weaponCAllArray[index];
             _weaponCAllArray[index] = null;
 
-            ActivateWeapon(_countWeaponC-1);
+            ActivateWeapon(_countWeaponC+1);
 
-            _weaponBarUI.SetImageWeapon(_weaponObjectsUIArray[_countWeaponC-1], _currentWeaponC.weaponM.spriteForHUD);
-            _weaponBarUI.EnableIdleState(_weaponObjectsUIArray[_countWeaponC-1]);
+            _weaponBarUI.SetImageWeapon(_weaponObjectsUIArray[_countWeaponC], _currentWeaponC.weaponM.spriteForHUD);
+            _weaponBarUI.EnableIdleState(_weaponObjectsUIArray[_countWeaponC]);
+            _weaponBarUI.DisableHolderState();
+            _weaponBarUI.EnableHolderState(_weaponObjectsUIArray[_countWeaponC]);
             //_weaponBarUI.Button2();
-            
+
         }
 
         public WeaponC RandomChooseNewWeapon() {
@@ -230,19 +235,15 @@ namespace Assets.Scripts.Weapons {
         }
 
         public void ActivateWeapon(int numWeapon) {
-            if (numWeapon>_countWeaponC-1) return;
-            _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes] += _bulletsInMagazine;
+            if (numWeapon>_countWeaponC+1) return;
+            _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes] += _bulletsInMagazine;
             _bulletsInMagazine = 0;
 
             //------------------------------------------------------------------------------
             //Исправить на данную строку, когда будут реализованы все виды оружия кроме RPG
             //_currentWeaponC = _weaponCHandleArray[numWeapon - 1];
-            if (_countWeaponC == 1) {
-                _currentWeaponC = _weaponCHandleArray[0];
-            } else {
-                _currentWeaponC = _weaponCHandleArray[1];
+            _currentWeaponC = _weaponCHandleArray[numWeapon-1];
 
-            }
 
             //--------------------------------------------------------------------------------
             // _currentWeaponM = _weaponCHandleArray[numWeapon-1].weaponM;
@@ -302,7 +303,7 @@ namespace Assets.Scripts.Weapons {
                         bulletRigidbody.velocity = angleRandomForward * fireVector * _currentWeaponC.weaponM.bulletSpeed;
 
 
-                        //Set bullet damage according to weapon damage value
+                        //Set bullet damage according to weapon damage valuePickup
                         newBullet.GetComponent<IBullet>().SetDamage(_currentWeaponC.weaponM.weaponDamage);
 
                         GameObject muzzleFX = Instantiate<GameObject>(_currentWeaponC.weaponM._muzzleFirePrefab,
@@ -340,13 +341,13 @@ namespace Assets.Scripts.Weapons {
 
             _audioSource.clip = _currentWeaponC.weaponM.reloadAudio;
             _audioSource.Play();
-            if (_bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes]+_bulletsInMagazine >= _currentWeaponC.weaponM.bulletsPerMagazine) {
-                _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes] += _bulletsInMagazine;
+            if (_pickupsDictionary[_currentWeaponC.weaponM.pickupTypes]+_bulletsInMagazine >= _currentWeaponC.weaponM.bulletsPerMagazine) {
+                _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes] += _bulletsInMagazine;
                 _bulletsInMagazine = _currentWeaponC.weaponM.bulletsPerMagazine;
-                _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes] -= _currentWeaponC.weaponM.bulletsPerMagazine;
+                _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes] -= _currentWeaponC.weaponM.bulletsPerMagazine;
             } else {
-                _bulletsInMagazine = _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes];
-                _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes] = 0;
+                _bulletsInMagazine = _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes];
+                _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes] = 0;
             }
             OnPlayerBulletsValueChanged();
 
@@ -370,9 +371,14 @@ namespace Assets.Scripts.Weapons {
 
         private void OnPlayerBulletsValueChanged() { //обновление бара патронов
             foreach (var item in _bulletChangedUIArray) {
-                item.OnPlayerBulletsValueChanged(_bulletsInMagazine, _bulletsDictionary[_currentWeaponC.weaponM.bulletsTypes], _currentWeaponC.weaponM.bulletsPerMagazine);
+                item.OnPlayerBulletsValueChanged(_bulletsInMagazine, _pickupsDictionary[_currentWeaponC.weaponM.pickupTypes], _currentWeaponC.weaponM.bulletsPerMagazine);
 
             }
+        }
+
+        public void AddAmmo(TypePickup typePickup, int ammoValue) {
+            _pickupsDictionary[typePickup] += ammoValue;
+            OnPlayerBulletsValueChanged();
         }
     }
 }
