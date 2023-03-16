@@ -3,7 +3,9 @@ using Assets.Scripts.Infrastructure.Managers;
 using Assets.Scripts.Units.Enemy.Data;
 using Assets.Scripts.Units.Players;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+
 
 namespace Assets.Scripts.Units.Enemy {
     public class EnemySpawner : SpawnerManager, IPlayerDead {
@@ -33,10 +35,13 @@ namespace Assets.Scripts.Units.Enemy {
 
         [SerializeField] private bool _isPlayerDeath = false;
 
-        // Start is called before the first frame update
+        private int[] spawnDistance = new []{-20,20}; // Distance from camera bounds where enemies will spawn
+        
+
+
         void Start() {
 
-
+            
             soundManager = FindObjectOfType<SoundManager>();
 
             //Wait 10 seconds for new wave to start
@@ -48,7 +53,7 @@ namespace Assets.Scripts.Units.Enemy {
             SpawnerManager spawnerManager) {
             _player = player;
             _enemySpawnerModelData = enemySpawnerModelData;
-            _plTransform = _player.transform;   
+            _plTransform = _player.transform;
             _spawnerManager = spawnerManager;
             _waitingForWave = false;
             isSpawnerLoaded = true;
@@ -57,11 +62,11 @@ namespace Assets.Scripts.Units.Enemy {
             }
         }
 
-        
-        // Update is called once per frame
+
+
         void Update() {
 
-            
+
         }
 
         public IEnumerator DelaySpawn() {
@@ -83,14 +88,32 @@ namespace Assets.Scripts.Units.Enemy {
         }
 
         private void CreateEnemy() {
-            Transform randomPoint = 
-                _enemySpawnerModelData.spawnPoints[Random.Range(0, _enemySpawnerModelData.spawnPoints.Length)];
+            // Transform randomPoint = 
+            //     _enemySpawnerModelData.spawnPoints[Random.Range(0, _enemySpawnerModelData.spawnPoints.Length)];
+            //
+            // GameObject enemy = Instantiate(_enemySpawnerModelData.enemyPrefab,
+            //     randomPoint.position,
+            //     Quaternion.identity);
 
-            GameObject enemy = Instantiate(_enemySpawnerModelData.enemyPrefab,
-                randomPoint.position,
-                Quaternion.identity);
+            // Calculate a random position outside the camera bounds
+            Vector3 randomPosition = _player.transform.position + 
+                                     new Vector3(spawnDistance[Random.Range(0,spawnDistance.Length)],
+                                         0f,
+                                         spawnDistance[Random.Range(0, spawnDistance.Length)]);
 
-            _countEnemiesSpawned++;
+            // Find the closest point on the NavMesh to the random position
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPosition, out hit, 2f, NavMesh.AllAreas)) {
+                // Instantiate the enemy prefab at the closest point on the NavMesh
+                GameObject enemy = Instantiate(_enemySpawnerModelData.enemyPrefab,
+                    hit.position, Quaternion.identity);
+
+                _countEnemiesSpawned++;
+                
+            }
+            
+
+
         }
 
         public void OnPlayerDead() {

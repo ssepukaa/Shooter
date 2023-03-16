@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers {
+    
     public class SoundManager : MonoBehaviour {
-        public AudioSource[] soundSources;
+        private AudioSource[] soundSources;
         private AudioSource soundAudioSource;
         private AudioSource musicAudioSource;
         public float soundsVolume = 1f;
@@ -13,8 +14,11 @@ namespace Assets.Scripts.Infrastructure.Managers {
         public bool isPlayOnAwakeMusics = false;
 
         private void Start() {
-            soundAudioSource = soundSources[0];
-            musicAudioSource = soundSources[1];
+            //soundSources = GetComponents<AudioSource>();
+            //soundAudioSource = soundSources[0];
+            //musicAudioSource = soundSources[1];
+            soundAudioSource = GetComponent<AudioSource>();
+            musicAudioSource = GetComponentInChildren<AudioSource>();
             // soundAudioSource = soundSources[0].GetComponent<AudioSource>();
             // musicAudioSource = soundSources[1].GetComponent<AudioSource>();
             // soundAudioSource.volume = soundsVolume;
@@ -25,6 +29,9 @@ namespace Assets.Scripts.Infrastructure.Managers {
             // musicAudioSource.playOnAwake = isPlayOnAwakeMusics;
             soundAudioSource.volume = 0.5f;
             musicAudioSource.volume = 0.3f;
+            if (musicAudioSource==null) {
+                Debug.Log("NULL!!!!!");
+            }
         }
 
         // public void PlaySound(AudioClip audioClip) {
@@ -43,6 +50,9 @@ namespace Assets.Scripts.Infrastructure.Managers {
         }
 
         public void PlayMusic(AudioClip audioClip) {
+            if (musicAudioSource == null) {
+                Debug.Log("NULL");
+            }
             musicAudioSource.clip = audioClip;
             musicAudioSource.Play();
         }

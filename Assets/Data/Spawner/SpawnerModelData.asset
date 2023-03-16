@@ -14,12 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1758736108074971611, guid: 15939cbd04848ef4c9cd14eaa8c87713,
     type: 3}
-  spawnPoints:
-  - {fileID: 6286226042516121594, guid: c6f6e2399ea1ed04d81482760226a706, type: 3}
-  - {fileID: 6980761377229772433, guid: 747b6aac71c36834084a23a621c1a2de, type: 3}
-  - {fileID: 2995078349419598216, guid: 483a46b795496394dabd5cffc2f956e5, type: 3}
+  spawnPoints: []
   spawnInterval: 0.5
-  enemiesPerWave: 100
+  enemiesPerWave: 10000
   nextSpawnTime: 5
   waveNumber: 3
   newWaveTimer: 5

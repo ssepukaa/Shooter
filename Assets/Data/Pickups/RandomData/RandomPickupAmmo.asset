@@ -15,7 +15,7 @@ MonoBehaviour:
   name: AmmoArrayForRandom
   pickupModels:
   - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
-  - {fileID: 11400000, guid: 51623e35a2f6a8f4e878f0439ce3103b, type: 2}
+  - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
   - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
   - {fileID: 11400000, guid: 51623e35a2f6a8f4e878f0439ce3103b, type: 2}
   - {fileID: 11400000, guid: 8732b8bcf3cc9c24392ac899bed22eb7, type: 2}
