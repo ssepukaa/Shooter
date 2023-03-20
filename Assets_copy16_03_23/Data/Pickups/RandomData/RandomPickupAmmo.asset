@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06824e0da4dbb1440859a280ad743355, type: 3}
+  m_Name: RandomPickupAmmo
+  m_EditorClassIdentifier: 
+  name: AmmoArrayForRandom
+  pickupModels:
+  - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
+  - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
+  - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
+  - {fileID: 11400000, guid: 51623e35a2f6a8f4e878f0439ce3103b, type: 2}
+  - {fileID: 11400000, guid: 8732b8bcf3cc9c24392ac899bed22eb7, type: 2}
+  - {fileID: 11400000, guid: 51623e35a2f6a8f4e878f0439ce3103b, type: 2}
+  - {fileID: 11400000, guid: 0f20094177ad167488d8ab6951d24288, type: 2}
