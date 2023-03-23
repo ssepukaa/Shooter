@@ -635,7 +635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ZOMBIE SHOOTER:ARTEM- THE BEST  CODER!!!
+  m_text: 'ZOMBIE SHOOTER: VIDEOGAME'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c2483786bbe88774cb8880768c2acde7, type: 2}
   m_sharedMaterial: {fileID: 7199864427378974028, guid: c2483786bbe88774cb8880768c2acde7,
