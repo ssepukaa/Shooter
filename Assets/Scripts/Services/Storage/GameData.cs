@@ -3,6 +3,9 @@ using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Services.Storage {
+
+    // Обучение по сериализации векторов
+
     [Serializable]
     public class GameData {
         public int speed;

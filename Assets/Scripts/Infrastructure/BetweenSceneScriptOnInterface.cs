@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Infrastructure {
     public class BetweenSceneScriptOnInterface : MonoBehaviour {
+        //Задержка загрузки, чтобы успели подгрузится все объекты
 
         private void Awake() {
             StartCoroutine(DelayBeforeStart());

@@ -5,12 +5,9 @@ using Assets.Scripts.Services;
 using Assets.Scripts.UI.Exp;
 using Assets.Scripts.Units.Enemy;
 using Assets.Scripts.Units.Pickups.Data;
-using Assets.Scripts.Units.Players;
 using Assets.Scripts.Units.Players.Data;
 using Assets.Scripts.Weapons;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 
@@ -27,13 +24,13 @@ namespace Assets.Scripts.Units.Players {
 
 
         public PlayerModelData playerModelData;
-        public RandomPickupModelData randomPickupModelDataAmmo
-            ;
+        public RandomPickupModelData randomPickupModelDataAmmo;
 
 
         //public WeaponListData currWeaponListData;
-        private SoundManager _soundManager;
         public Transform _muzzle;
+        private SoundManager _soundManager;
+
         private MoveService moveService;
         private Weapon _weapon;
 
@@ -64,7 +61,8 @@ namespace Assets.Scripts.Units.Players {
         private Quaternion _hitRotation;
         private Animator _animator;
 
-        [Header("UI")] private IExpUI[] _expUiList;
+        [Header("UI")]
+        private IExpUI[] _expUiList;
 
 
 
@@ -135,27 +133,6 @@ namespace Assets.Scripts.Units.Players {
             _hitRotation = rotation;
         }
 
-
-
-        protected void Death() {
-
-            _soundManager.PlaySound(playerModelData.GetSoundOfDeath(), 0.3f, 1f);
-            Instantiate(playerModelData.onDeadPrefab, _hitPosition, _hitRotation);
-            movementSpeed = 0;
-            moveService.canMove = false;
-
-            var recieversOnDeathList = FindObjectsOfType<Object>().
-                OfType<IPlayerDead>().ToArray();
-            foreach (var item in recieversOnDeathList) {
-                item.OnPlayerDead();
-
-            }
-            AnimatorDead();
-            Destroy(gameObject, 2f);
-
-        }
-
-
         public float GetHealth() {
             return health;
         }
@@ -185,19 +162,10 @@ namespace Assets.Scripts.Units.Players {
             }
         }
 
-        private void OnLevelUp() {
-            _level++;
-            _gameManager.OnLevelUpOpenPopup(_weapon.RandomChooseNewWeapon());
-        }
-
         public void GetNewWeaponForWeapon(WeaponC weaponC) {
             _weapon.GetNewWeapon(weaponC);
         }
 
-        private float GetLevelExp() {
-            _levelExp = (float)_level * 10f;
-            return _levelExp;
-        }
 
         public void AnimatorWalk() {
             _animator.SetTrigger("Walk");
@@ -234,6 +202,41 @@ namespace Assets.Scripts.Units.Players {
 
 
         }
+
+        protected void Death() {
+
+            _soundManager.PlaySound(playerModelData.GetSoundOfDeath(), 0.3f, 1f);
+            Instantiate(playerModelData.onDeadPrefab, _hitPosition, _hitRotation);
+            movementSpeed = 0;
+            moveService.canMove = false;
+
+            var recieversOnDeathList = FindObjectsOfType<Object>().
+                OfType<IPlayerDead>().ToArray();
+            foreach (var item in recieversOnDeathList) {
+                item.OnPlayerDead();
+
+            }
+            AnimatorDead();
+            Destroy(gameObject, 2f);
+
+        }
+
+
+
+
+        private void OnLevelUp() {
+            _level++;
+            _gameManager.OnLevelUpOpenPopup(_weapon.RandomChooseNewWeapon());
+        }
+
+
+
+        private float GetLevelExp() {
+            _levelExp = (float)_level * 10f;
+            return _levelExp;
+        }
+
+
 
     }
 }

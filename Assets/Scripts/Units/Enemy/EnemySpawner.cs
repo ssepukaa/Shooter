@@ -8,14 +8,16 @@ using UnityEngine.SceneManagement;
 
 
 namespace Assets.Scripts.Units.Enemy {
-    public class EnemySpawner : SpawnerManager, IPlayerDead {
-        [SerializeField] private EnemySpawnerModelData _enemySpawnerModelData;
-        private Player _player;
-        private SpawnerManager _spawnerManager;
-        public SoundManager soundManager;
-
+    public class EnemySpawner : SpawnerManager, IPlayerDead {       
+        
+        public SoundManager soundManager;  
         [HideInInspector] public Transform _plTransform;
 
+        [SerializeField] private EnemySpawnerModelData _enemySpawnerModelData; 
+        [SerializeField] private bool _isPlayerDeath = false;
+        private Player _player;
+        private SpawnerManager _spawnerManager;
+        
         //public Texture crosshairTexture;
         private GameObject enemyPrefab;
         private float spawnInterval; //Spawn new enemy each n seconds
@@ -33,7 +35,7 @@ namespace Assets.Scripts.Units.Enemy {
         private int enemiesEliminated;
         private int _countEnemiesSpawned;
 
-        [SerializeField] private bool _isPlayerDeath = false;
+       
 
         private int[] spawnDistance = new []{-20,20}; // Distance from camera bounds where enemies will spawn
         
@@ -88,13 +90,7 @@ namespace Assets.Scripts.Units.Enemy {
         }
 
         private void CreateEnemy() {
-            // Transform randomPoint = 
-            //     _enemySpawnerModelData.spawnPoints[Random.Range(0, _enemySpawnerModelData.spawnPoints.Length)];
-            //
-            // GameObject enemy = Instantiate(_enemySpawnerModelData.enemyPrefab,
-            //     randomPoint.position,
-            //     Quaternion.identity);
-
+          
             // Calculate a random position outside the camera bounds
             Vector3 randomPosition = _player.transform.position + 
                                      new Vector3(spawnDistance[Random.Range(0,spawnDistance.Length)],

@@ -25,12 +25,7 @@ namespace Assets.Scripts.Units.Enemy {
         private bool _isPlayerDead = false;
         private GameManager _gameManager;
 
-        // Сделать ссылки на Data Scriptableobject
-        // [Header("VFX/SFX")]
-        // private GameObject _onHitPrefab;
-        // private AudioClip _deathAudioClip;
-        // private GameObject _npcDeadPrefab;
-
+       
         [Header("Stats")] [SerializeField] private float _health = 100f;
         [SerializeField] private float _exp = 2f;
         [Header("Movement")] private float _movementSpeed = 2f;
@@ -83,19 +78,14 @@ namespace Assets.Scripts.Units.Enemy {
         }
 
 
-        // Start is called before the first frame update
+      
         void Start() {
             InitDataFromModel();
 
 
-            //Set Rigidbody to Kinematic to prevent hit register
-            // if (GetComponent<Rigidbody>())
-            // {
-            //     GetComponent<Rigidbody>().isKinematic = true;
-            // }
         }
 
-        // Update is called once per frame
+       
         void Update() {
             if (!_canMove || _isPlayerDead) return;
             if (_playerTransform != null && !_isPlayerDead) {
@@ -111,7 +101,7 @@ namespace Assets.Scripts.Units.Enemy {
 
                         if (Physics.Raycast(muzzle.position, muzzle.forward, out hit, _attackDistance)) {
                             if (hit.transform == _playerTransform) {
-                                //Debug.DrawLine(muzzle.position, muzzle.position + muzzle.forward * _attackDistance, Color.cyan);
+                                
                                 _animator.SetTrigger("Attack");
                                 IEntity player = hit.transform.GetComponent<IEntity>();
                                 player.ApplyDamage(_damageValue);

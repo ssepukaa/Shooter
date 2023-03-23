@@ -6,8 +6,7 @@ using UnityEngine;
 namespace Assets.Scripts.Infrastructure.Managers {
     public class SpawnerManager : MonoBehaviour, IPlayerDead {
 
-        //public EnemySpawnerModelData enemySpawnerModelsList;
-
+        
         private Player _player;
         private GameManager _gameManager;
         private bool _isPlayerDead = false;

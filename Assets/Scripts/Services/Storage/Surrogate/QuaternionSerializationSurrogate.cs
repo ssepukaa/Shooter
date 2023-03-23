@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.Services.Storage.Surrogate {
     public class QuaternionSerializationSurrogate : ISerializationSurrogate{
+
+        // Обучение по сериализации векторов
         public void GetObjectData(object obj, SerializationInfo info, StreamingContext context) {
             var q = (Quaternion)obj;
             info.AddValue("x",q.x);

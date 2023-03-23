@@ -108,11 +108,10 @@ namespace Assets.Scripts.Weapons {
             _player = GetComponent<Player>();
 
             _muzzleTransform = _player.GetMuzzleTransform();
-            //   _weaponManager = FindObjectOfType<WeaponManager>();
+            
 
             _audioSource = GetComponent<AudioSource>();
             _audioSource.playOnAwake = false;
-            //Make sound 3D
             _audioSource.spatialBlend = 1f;
             _bulletChangedUIArray = FindObjectsOfType<MonoBehaviour>().OfType<IBulletChangedUI>().ToArray();
             _weaponBarUI = FindObjectOfType<UIWidgetWeaponBar>();
@@ -125,9 +124,6 @@ namespace Assets.Scripts.Weapons {
 
             _currentWeaponC = _weaponCHandleArray[0];
 
-            //_currentWeaponM = _currentWeaponC.weaponM;
-            //ReloadWeapon();
-            // _bulletsInInventory = _bulletsTypeRifle;
 
             _weaponBarUI.Button1();
         }
@@ -151,7 +147,6 @@ namespace Assets.Scripts.Weapons {
             _weaponCAllArray[6] = _katanaWeaponC;
 
             _weaponCHandleArray[_countWeaponC] = _weaponCAllArray[0];
-            //_countWeaponC++;
             _weaponCAllArray[0] = null;
         }
 
@@ -170,7 +165,6 @@ namespace Assets.Scripts.Weapons {
             _weaponBarUI.EnableIdleState(_weaponObjectsUIArray[_countWeaponC]);
             _weaponBarUI.DisableHolderState();
             _weaponBarUI.EnableHolderState(_weaponObjectsUIArray[_countWeaponC]);
-            //_weaponBarUI.Button2();
 
         }
 

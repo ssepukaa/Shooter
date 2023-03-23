@@ -7,6 +7,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts.Services.Storage {
+
+    // Обучение по сериализации векторов
+
     public class Storage {
         private string filePath;
         private BinaryFormatter formatter;

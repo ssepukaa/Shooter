@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Assets.Scripts.Services.Storage.Surrogate {
     public class Vector3SerializationSurrogate : ISerializationSurrogate {
+
+        // Обучение по сериализации векторов
+
         public void GetObjectData(object obj, SerializationInfo info, StreamingContext context) {
             var v3 = (Vector3)obj;
             info.AddValue("x", v3.x);

@@ -3,15 +3,17 @@
 namespace Assets.Scripts.Infrastructure.Managers {
     
     public class SoundManager : MonoBehaviour {
-        private AudioSource[] soundSources;
-        private AudioSource soundAudioSource;
-        private AudioSource musicAudioSource;
+       
         public float soundsVolume = 1f;
         public float soundsPitch = 1f;
         public float musicVolume = 1f;
         public float musicPitch = 1f;
         public bool isPlayOnAwakeSounds = false;
         public bool isPlayOnAwakeMusics = false;
+        
+        private AudioSource[] soundSources;
+        private AudioSource soundAudioSource;
+        private AudioSource musicAudioSource;
 
         private void Start() {
             //soundSources = GetComponents<AudioSource>();
@@ -29,9 +31,9 @@ namespace Assets.Scripts.Infrastructure.Managers {
             // musicAudioSource.playOnAwake = isPlayOnAwakeMusics;
             soundAudioSource.volume = 0.5f;
             musicAudioSource.volume = 0.3f;
-            if (musicAudioSource==null) {
-                Debug.Log("NULL!!!!!");
-            }
+            // if (musicAudioSource==null) {
+            //     Debug.Log("NULL!!!!!");
+            // }
         }
 
         // public void PlaySound(AudioClip audioClip) {

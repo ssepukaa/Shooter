@@ -3,13 +3,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.Services {
     public class MoveService : MyServices, IUpdateMoveService {
-        [Header("Movement")] private CharacterController _characterController;
+
+        public bool canMove = true;
+
+        private CharacterController _characterController;
         private Vector3 moveDirectionLeft = Vector3.zero;
         private Vector3 moveDirectionRight = Vector3.zero;
         private Transform transform;
         private Player player;
         private float _deltairectAxisToFire;
-        public bool canMove = true;
         private bool _checkSwitchRegisterIsWalking;
         private bool _checkSwitchRegisterIsAttacking;
 

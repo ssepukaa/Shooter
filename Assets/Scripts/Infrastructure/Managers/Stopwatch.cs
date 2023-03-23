@@ -2,10 +2,12 @@
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Managers {
-    public class Stopwatch : MonoBehaviour {
+    public class Stopwatch : MonoBehaviour {      
+        
+        [SerializeField] private GameObject _uiGameObject;
+
         private float elapsedTime = 0.0f;
         private bool isRunning = false;
-        [SerializeField] private GameObject _uiGameObject;
         private TextMeshProUGUI _timerText;
 
         void Start() {

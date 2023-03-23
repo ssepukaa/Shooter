@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Services.Storage {
     public class ExampleGameobject: MonoBehaviour {
+
+        // Обучение по сериализации векторов
+
         private Storage storage;
         private GameData gameData;
 

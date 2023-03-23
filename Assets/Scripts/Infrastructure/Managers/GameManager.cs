@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Assets.Scripts.UI.Menu;
-using Assets.Scripts.Units.Enemy;
+
 using Assets.Scripts.Units.Enemy.Data;
-using Assets.Scripts.Units.Pickups;
+
 using Assets.Scripts.Units.Pickups.Data;
 using Assets.Scripts.Units.Players;
 using Assets.Scripts.Weapons;
@@ -14,31 +14,32 @@ using UnityEngine;
 namespace Assets.Scripts.Infrastructure.Managers {
     public class GameManager : MonoBehaviour, IPlayerDead {
 
-        //public SoundManager soundManager;
-        public TypeRandomPickupGroup typeRandomPickupGroup;
-        public EnemySpawnerModelData[] enemySpawnerModelsList;
-
+        [Header("RandomPickup")]
+        public TypeRandomPickupGroup typeRandomPickupGroup; // надо добавить разных типов
+        public EnemySpawnerModelData[] enemySpawnerModelsList; // скриптблобжекты для моделей спавнера врагов
         [SerializeField] private AudioClip[] audioClips;
         private RandomPickupModelData _randomPickupModelData;
 
+        [Header("PlayerReference")]
         private Player _player;
-        private SpawnerManager _spawnManager;
-        private bool _isPlayerDead = false;
-        private UIInterfaceButtonsPopups _uiInterfaceButtonsPopups;
-        private Stopwatch _stopwatch;
 
+        [Header("SpawnManagerReference")]
+        private SpawnerManager _spawnManager;
+
+        private bool _isPlayerDead = false;
+        [Header("UIReference")]
+        private UIInterfaceButtonsPopups _uiInterfaceButtonsPopups;
+        private bool _isOpenedPopupNewLevel = false; //тестово на одно открытие окна
+
+        [Header("Timer")]
+        private Stopwatch _stopwatch;
+        [Header("AudioManagerReference")]
         private AudioSource AudioSource;
 
 
-        private bool _isOpenedPopupNewLevel = false; //тестово на одно открытие окна
 
         private void Start() {
-            // if (FindObjectsOfType<GameManager>().Length > 1) {
-            //     Destroy(gameObject);
-            // } else {
-            //     DontDestroyOnLoad(this);
-            //
-            // }
+            
             AudioSource = GetComponent<AudioSource>();
             AudioSource.clip=audioClips[Random.Range(0, audioClips.Length)];
             AudioSource.Play();
@@ -51,11 +52,7 @@ namespace Assets.Scripts.Infrastructure.Managers {
             _uiInterfaceButtonsPopups = FindObjectOfType<UIInterfaceButtonsPopups>();
             _stopwatch = GetComponent<Stopwatch>();
             _stopwatch.StartStopwatch();
-            //soundManager = GetComponentInChildren<SoundManager>();
             
-
-           // soundManager.PlayMusic(audioClips[0]);
-            //soundManager.PlayMusic(audioClips[Random.Range(0,audioClips.Length)]);
         }
 
 

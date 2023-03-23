@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 namespace Assets.Scripts.Infrastructure {
 
     // Можно расширить, чтобы удалялись неиспользуемые объекты , если их было создано слишком много
+    // Надо добавить в остальные места где есть Instantiate
     public class PoolMono<T> where T : MonoBehaviour {
         public T prefab { get; }
         public bool autoExpand { get; set; }
